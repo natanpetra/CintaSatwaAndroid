@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Warna ikon ketika ditekan -->
+    <item android:color="@color/green" android:state_checked="true" />
+    <!-- Warna ikon ketika tidak ditekan -->
+    <item android:color="@color/gray" />
+</selector>

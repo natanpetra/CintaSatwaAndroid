@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.natan.klinik">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <application
+        android:name=".BaseApp"
+        android:allowBackup="true"
+        android:icon="@drawable/img_klinik_cinta"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/img_klinik_cinta"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activities.DetailDogGuideActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.RiwayatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ScanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DetailObatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ObatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DetailDoctorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ConsultationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DetectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BerandaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ClinicActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProductListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DoctorListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DogGuideActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SplashScreenActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.ReservasiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ReservationHistoryActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC0hM-W8i0wbzGiuMa2uBXInqDCp6JDeiA" />
+    </application>
+
+</manifest>

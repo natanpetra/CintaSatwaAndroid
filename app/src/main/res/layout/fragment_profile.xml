@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/imgProfilPasien"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_account"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_circle"
+            android:elevation="4dp" />
+
+        <TextView
+            android:id="@+id/tvNamaPasien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Pasien"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#212121"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tvEmailPasien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="email@domain.com"
+            android:textSize="16sp"
+            android:textColor="#757575"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvRolePasien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Role: Pengguna"
+            android:textSize="14sp"
+            android:textColor="#388E3C"
+            android:layout_marginBottom="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#BDBDBD"
+            android:layout_marginVertical="16dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="No. HP"
+                android:textSize="16sp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:id="@+id/tvPhonePasien"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="08xxxxxxxxxx"
+                android:textSize="16sp"
+                android:textColor="#424242"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#D32F2F"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:padding="12dp"
+            android:textStyle="bold"/>
+
+        <!-- Tambahkan button ini di dalam layout fragment_profile.xml, di bawah informasi profil -->
+        <Button
+            android:id="@+id/btnReservationHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="16dp"
+            android:text="Lihat Riwayat Reservasi"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorPrimary"
+            android:drawableStart="@drawable/ic_history"
+            android:drawablePadding="8dp"
+            android:padding="12dp" />
+
+
+    </LinearLayout>
+</ScrollView>
