@@ -11,6 +11,7 @@ import com.natan.klinik.model.Profile
 import com.natan.klinik.model.Reservation
 import com.natan.klinik.model.ScanResponse
 import com.natan.klinik.model.SubmitScanResponse
+import com.natan.klinik.model.UploadResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.Response
@@ -93,4 +94,11 @@ interface ApiService {
     fun getReservationHistory(
         @Path("user_id") userId: Int
     ): Call<List<Reservation>>
+
+    @Multipart
+    @POST("customer/update-thumbnail") // ganti dengan endpoint kamu
+    fun uploadThumbnail(
+        @Part("user_id") userId: RequestBody,
+        @Part thumbnail: MultipartBody.Part
+    ): Call<UploadResponse>
 }
