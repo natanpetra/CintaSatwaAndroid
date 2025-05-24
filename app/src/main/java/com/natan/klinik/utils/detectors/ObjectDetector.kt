@@ -22,7 +22,8 @@ class DetectionResult(
 
 enum class ImageSource {
     CAMERA,
-    GALLERY
+    GALLERY,
+    CAMERA_SAVED,
 }
 
 interface ObjectDetector {

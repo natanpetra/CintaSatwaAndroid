@@ -25,7 +25,7 @@ class YoloDetector(
         yolo.setIouThreshold(iouThreshold)
         yolo.setConfidenceThreshold(confidenceThreshold)
 
-        val modelPath = "yolov11_float32.tflite"
+        val modelPath = "yolov8_float32.tflite"
         val metadataPath = "metadata.yaml"
 
         val config = LocalYoloModel(
@@ -69,6 +69,11 @@ class YoloDetector(
                 }
             }
             ImageSource.GALLERY -> {
+                imgW = ppImage.width
+                imgH = ppImage.height
+            }
+
+            ImageSource.CAMERA_SAVED -> {
                 imgW = ppImage.width
                 imgH = ppImage.height
             }

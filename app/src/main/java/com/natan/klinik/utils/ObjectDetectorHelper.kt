@@ -18,6 +18,7 @@ package com.natan.klinik.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
+import android.util.Log
 import com.natan.klinik.utils.detectors.ImageSource
 import com.natan.klinik.utils.detectors.ObjectDetection
 import com.natan.klinik.utils.detectors.ObjectDetector
@@ -68,7 +69,6 @@ class ObjectDetectorHelper(
         }
     }
 
-
     fun detect(image: Bitmap, imageRotation: Int, source: ImageSource) {
 
         if (objectDetector == null) {
@@ -93,9 +93,11 @@ class ObjectDetectorHelper(
             objectDetectorListener?.onResults(
                 results.detections,
                 inferenceTime,
+                imageRotation,
+                image,
                 results.image.height,
                 results.image.width,
-                source
+                source,
             )
         }
     }
@@ -105,6 +107,8 @@ class ObjectDetectorHelper(
         fun onResults(
             results: List<ObjectDetection>,
             inferenceTime: Long,
+            imageRotation: Int,
+            image: Bitmap,
             imageHeight: Int,
             imageWidth: Int,
             source: ImageSource,
