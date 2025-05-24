@@ -24,6 +24,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.DetailDogEctoparasiteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.EctoparasiteActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.DetailDogGuideActivity"
             android:exported="false" />
         <activity

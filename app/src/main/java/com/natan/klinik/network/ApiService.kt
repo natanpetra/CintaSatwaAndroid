@@ -4,6 +4,7 @@ import com.natan.klinik.model.ApiResponse
 import com.natan.klinik.model.CheckoutRequest
 import com.natan.klinik.model.Clinic
 import com.natan.klinik.model.DoctorItem
+import com.natan.klinik.model.Ectoparasite
 import com.natan.klinik.model.Guide
 import com.natan.klinik.model.OrderResponse
 import com.natan.klinik.model.ProductItem
@@ -57,6 +58,10 @@ interface ApiService {
     @GET("dog-care-guides") // Sesuaikan dengan endpoint API kamu
     fun getGuide(
     ): Call<List<Guide>>
+
+    @GET("ectoparasite-diseases") // Sesuaikan dengan endpoint API kamu
+    fun getEctoparasite(
+    ): Call<List<Ectoparasite>>
 
     @POST("checkout")
     fun checkout(@Body request: CheckoutRequest): Call<ApiResponse>
