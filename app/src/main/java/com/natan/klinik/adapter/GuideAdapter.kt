@@ -44,7 +44,7 @@ class GuideAdapter(
 
         // Load Image dengan Glide
         Glide.with(mContext)
-            .load(data.image) // Pastikan ini adalah field gambar yang benar
+            .load(data.imageUrl) // Pastikan ini adalah field gambar yang benar
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(holder.imgProduct) // Sesuaikan ID gambar
 

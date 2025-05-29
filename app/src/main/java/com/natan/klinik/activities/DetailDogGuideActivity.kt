@@ -34,7 +34,7 @@ class DetailDogGuideActivity : AppCompatActivity() {
             binding.txtGuideName.text = guide.title
             binding.txtGuideDesc.text = guide.content
             Glide.with(this@DetailDogGuideActivity)
-                .load(guide.image) // Pastikan ini sesuai dengan field gambar yang benar
+                .load(guide.imageUrl) // Pastikan ini sesuai dengan field gambar yang benar
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.drawable.img_doctor)
                 .into(binding.imgDogGuide)

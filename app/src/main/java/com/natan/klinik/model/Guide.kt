@@ -21,5 +21,5 @@ data class Guide(
 	val content: String? = null,
 
 	@field:SerializedName("image_url")
-	val image: String? = null,
+	val imageUrl: String? = null,
 ) : Serializable
