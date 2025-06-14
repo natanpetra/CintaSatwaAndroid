@@ -215,6 +215,7 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
 
     private fun loadModelFile(): MappedByteBuffer {
         val fileDescriptor = assets.openFd("best_float32_1.tflite")
+//        val fileDescriptor = assets.openFd("v11real.tflite")
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
         val fileChannel = inputStream.channel
         return fileChannel.map(
@@ -237,7 +238,7 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             }
         }
     }
-
+//get image rotation Exit interface
     private fun getImageRotationFromUri(imageUri: Uri): Int {
         val inputStream = contentResolver.openInputStream(imageUri)
         val exif = inputStream?.let { ExifInterface(it) }

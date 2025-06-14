@@ -18,6 +18,7 @@ import com.natan.klinik.activities.DogGuideActivity
 import com.natan.klinik.activities.EctoparasiteActivity
 import com.natan.klinik.activities.ObatActivity
 import com.natan.klinik.activities.ProductListActivity
+import com.natan.klinik.activities.RasActivity
 import com.natan.klinik.activities.ReservasiActivity
 import com.natan.klinik.activities.RiwayatActivity
 import com.natan.klinik.adapter.MainAdapter
@@ -113,6 +114,8 @@ class HomeFragment : Fragment(), MainAdapter.OnSelectData {
         lsMainMenu.add(mdlMainMenu)
         mdlMainMenu = ModelMain("Ectoparasite", R.drawable.img_dog_guide)
         lsMainMenu.add(mdlMainMenu)
+        mdlMainMenu = ModelMain("Ras", R.drawable.img_dog_guide)
+        lsMainMenu.add(mdlMainMenu)
 
         val myAdapter = MainAdapter(lsMainMenu, this)
         binding.rvMainMenu.adapter = myAdapter
@@ -139,6 +142,7 @@ class HomeFragment : Fragment(), MainAdapter.OnSelectData {
             "Produk" -> startActivity(Intent(requireContext(), ProductListActivity::class.java))
             "Reservasi Online" -> startActivity(Intent(requireContext(), ReservasiActivity::class.java))
             "Ectoparasite" -> startActivity(Intent(requireContext(), EctoparasiteActivity::class.java))
+            "Ras" -> startActivity(Intent(requireContext(),RasActivity::class.java))
         }
     }
 

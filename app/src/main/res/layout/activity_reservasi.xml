@@ -48,7 +48,7 @@
                     android:id="@+id/etPetName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nama Hewan"
+                    android:hint="Masukan nama anda"
                     android:inputType="text"
                     android:background="@drawable/edittext_background"
                     android:padding="12dp" />

@@ -9,6 +9,7 @@ import com.natan.klinik.model.Guide
 import com.natan.klinik.model.OrderResponse
 import com.natan.klinik.model.ProductItem
 import com.natan.klinik.model.Profile
+import com.natan.klinik.model.Ras
 import com.natan.klinik.model.Reservation
 import com.natan.klinik.model.ScanResponse
 import com.natan.klinik.model.SubmitScanResponse
@@ -62,6 +63,10 @@ interface ApiService {
     @GET("ectoparasite-diseases") // Sesuaikan dengan endpoint API kamu
     fun getEctoparasite(
     ): Call<List<Ectoparasite>>
+
+    @GET("ras") // Sesuaikan dengan endpoint API kamu
+    fun getRas(
+    ): Call<List<Ras>>
 
     @POST("checkout")
     fun checkout(@Body request: CheckoutRequest): Call<ApiResponse>
