@@ -53,6 +53,11 @@ class ReservasiActivity : AppCompatActivity() {
     }
 
     private fun setupReservationForm() {
+        val customerName = Prefs.getString("name")
+        binding.etPetName.setText(customerName)
+        val customerTelp= Prefs.getString("phone")
+        binding.etPetType.setText(customerTelp)
+
         // Tambahkan semua tombol waktu ke list
         timeButtons.add(binding.btnTime1)
         timeButtons.add(binding.btnTime2)

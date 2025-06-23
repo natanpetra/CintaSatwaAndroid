@@ -14,9 +14,6 @@ import com.natan.klinik.R
 import com.natan.klinik.model.Ectoparasite
 import java.text.DecimalFormat
 
-/**
- * Created by Azhar Rivaldi on 22-12-2019.
- */
 
 class EctoparasitAdapter(
     private val mContext: Context,

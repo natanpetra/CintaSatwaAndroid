@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.natan.klinik.R
 import com.natan.klinik.model.Ras
 
-/**
- * Created by Azhar Rivaldi on 22-12-2019.
- */
+
 
 class RasAdapter(
     private val mContext: Context,

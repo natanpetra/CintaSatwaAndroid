@@ -119,6 +119,7 @@ dependencies {
     implementation "androidx.camera:camera-view:1.4.1"
 
     implementation 'org.yaml:snakeyaml:1.29'
+    implementation 'com.microsoft.onnxruntime:onnxruntime-mobile:1.16.3'
 
     implementation 'com.google.ai.edge.litert:litert-gpu-api:1.0.1'
 }

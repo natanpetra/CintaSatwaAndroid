@@ -50,7 +50,6 @@ class ReservationAdapter(private val reservations: List<Reservation>) :
             }
 
             // Set status dan warna
-
         }
 
         private fun formatDate(dateString: String?): String {

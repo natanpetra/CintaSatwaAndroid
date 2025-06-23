@@ -14,9 +14,6 @@ import com.natan.klinik.R
 import com.natan.klinik.model.Guide
 import java.text.DecimalFormat
 
-/**
- * Created by Azhar Rivaldi on 22-12-2019.
- */
 
 class GuideAdapter(
     private val mContext: Context,

@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.natan.klinik.R;
 
-/**
- * Created by Azhar Rivaldi on 06/04/2020.
- */
+
 
 public class LayoutMarginDecoration extends BaseLayoutMargin {
 

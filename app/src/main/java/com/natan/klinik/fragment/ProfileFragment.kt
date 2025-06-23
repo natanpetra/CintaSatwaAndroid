@@ -64,6 +64,7 @@ class ProfileFragment : Fragment() {
 
         var name = Prefs.getString("name", "")
         var email = Prefs.getString("email", "")
+        val phone = Prefs.getString("phone", "")
         var role_id = Prefs.getInt("role_id", 0)
         var image = Prefs.getString("image", "")
         binding.tvNamaPasien.setText(name)

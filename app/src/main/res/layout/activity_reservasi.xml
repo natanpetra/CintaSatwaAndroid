@@ -51,7 +51,8 @@
                     android:hint="Masukan nama anda"
                     android:inputType="text"
                     android:background="@drawable/edittext_background"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -63,7 +64,7 @@
                     android:id="@+id/etPetType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Jenis Hewan"
+                    android:hint="Nomer telepon"
                     android:inputType="text"
                     android:background="@drawable/edittext_background"
                     android:padding="12dp" />

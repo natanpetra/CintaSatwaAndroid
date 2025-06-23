@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.natan.klinik.R
 import com.natan.klinik.model.ModelMain
 
-/**
- * Created by Azhar Rivaldi on 22-12-2019.
- */
+
 class MainAdapter(
     private val items: MutableList<ModelMain?>,
     private val onSelectData: OnSelectData // Ubah nama interface ke PascalCase

@@ -91,9 +91,10 @@ class ProductListActivity : AppCompatActivity(), ProductAdapter.onSelectData {
             .setPositiveButton("Tambah") { _, _ ->
                 val quantity = etQuantity.text.toString().toIntOrNull() ?: 1
                 if (quantity > 0) {
+                    // ✅ PERBAIKAN: Set quantity dengan benar
                     val productToAdd = product.copy(quantity = quantity)
                     CartManager.addToCart(productToAdd)
-                    Toast.makeText(this, "Ditambahkan ke keranjang", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Ditambahkan $quantity item ke keranjang", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Batal", null)

@@ -1,8 +1,9 @@
 package com.natan.klinik.activities
+
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +15,6 @@ import com.natan.klinik.model.OrderItemRequest
 import com.natan.klinik.model.ProductItem
 import com.natan.klinik.network.RetrofitClient
 import com.natan.klinik.utils.CartManager
-import com.natan.klinik.utils.SessionManager
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,7 +22,6 @@ import retrofit2.Response
 import java.net.URLEncoder
 
 class CheckoutActivity : AppCompatActivity() {
-    private lateinit var session: SessionManager
     private lateinit var binding: ActivityCheckoutBinding
     private lateinit var cartAdapter: CartAdapter
     private var cartItems: MutableList<ProductItem> = mutableListOf()
@@ -48,7 +47,10 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        cartAdapter = CartAdapter(cartItems) { updateTotalPrice() }
+        cartAdapter = CartAdapter(cartItems) {
+            updateTotalPrice()
+            checkEmptyCart()
+        }
         binding.rvCartItems.apply {
             layoutManager = LinearLayoutManager(this@CheckoutActivity)
             adapter = cartAdapter
@@ -56,15 +58,33 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun loadCartItems() {
-        // Get items from CartManager or intent
+        cartItems.clear()
         cartItems.addAll(CartManager.getCartItems())
         cartAdapter.notifyDataSetChanged()
         updateTotalPrice()
+        checkEmptyCart()
+
+        // ✅ Debug log
+        Log.d("Checkout", "Loaded ${cartItems.size} items")
+        CartManager.printCartItems()
     }
 
     private fun updateTotalPrice() {
-        val totalPrice = cartItems.sumOf { it.price?.toDoubleOrNull() ?: 0.0 * (it.quantity ?: 0) }
+        val totalPrice = cartItems.sumOf {
+            (it.price?.toDoubleOrNull() ?: 0.0) * (it.quantity ?: 0)
+        }
         binding.tvTotalPrice.text = "Total: Rp ${String.format("%,.0f", totalPrice)}"
+
+        // ✅ Debug log
+        Log.d("Checkout", "Total Price: $totalPrice")
+    }
+
+    // ✅ Check jika cart kosong
+    private fun checkEmptyCart() {
+        if (cartItems.isEmpty()) {
+            binding.tvTotalPrice.text = "Keranjang kosong"
+            Toast.makeText(this, "Keranjang belanja kosong", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setupCheckoutButton() {
@@ -79,8 +99,16 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun processCheckout() {
-        val userId = Prefs.getInt("user_id", 0) // Implement your user ID retrieval
-        val totalPrice = cartItems.sumOf { (it.price?.toDoubleOrNull() ?: 0.0) * (it.quantity ?: 0) }
+        val userId = Prefs.getInt("user_id", 0)
+
+        if (userId == 0) {
+            Toast.makeText(this, "User ID tidak valid", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val totalPrice = cartItems.sumOf {
+            (it.price?.toDoubleOrNull() ?: 0.0) * (it.quantity ?: 0)
+        }
 
         val orderItems = cartItems.map { product ->
             OrderItemRequest(
@@ -95,6 +123,9 @@ class CheckoutActivity : AppCompatActivity() {
             total_price = totalPrice
         )
 
+        // ✅ Debug log
+        Log.d("Checkout", "Processing checkout for user: $userId, total: $totalPrice")
+
         RetrofitClient.instance.checkout(checkoutRequest).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
@@ -106,13 +137,19 @@ class CheckoutActivity : AppCompatActivity() {
                                 "Checkout berhasil! Order ID: ${apiResponse.order_id}",
                                 Toast.LENGTH_LONG
                             ).show()
+
+                            // ✅ Clear cart setelah checkout berhasil
                             CartManager.clearCart()
-                            finish()
+                            cartItems.clear()
+                            cartAdapter.notifyDataSetChanged()
+
                             sendWhatsAppReminderToSeller(
                                 orderId = apiResponse.order_id.toString(),
-                                customerName = Prefs.getString("name"), // Ganti dengan data yang sesuai
-                                totalAmount = apiResponse.total_price.toString() // Ganti dengan total pembayaran
+                                customerName = Prefs.getString("name", "Customer"),
+                                totalAmount = String.format("%,.0f", apiResponse.total_price ?: totalPrice)
                             )
+
+                            finish()
                         }
                         else -> {
                             Toast.makeText(
@@ -141,15 +178,9 @@ class CheckoutActivity : AppCompatActivity() {
         })
     }
 
-    private fun getUserId(): Int {
-        // Implement your user ID retrieval logic
-        // Example: SharedPreferences or from your auth system
-        return 1 // Replace with actual user ID
-    }
-
     private fun sendWhatsAppReminderToSeller(orderId: String, customerName: String, totalAmount: String) {
         try {
-            val sellerPhone = "6281234567890" // Ganti dengan nomor WA penjual (format: 62 tanpa '+' atau '0')
+            val sellerPhone = "6281234567890"
             val message = """
             📢 *REMINDER ORDER BARU* 📢
             
@@ -158,7 +189,7 @@ class CheckoutActivity : AppCompatActivity() {
             *Detail Order:*
             - Order ID: $orderId
             - Nama Customer: $customerName
-            - Total Pembayaran: $totalAmount
+            - Total Pembayaran: Rp $totalAmount
             
             Segera proses ordernya ya!
             """.trimIndent()
@@ -167,10 +198,15 @@ class CheckoutActivity : AppCompatActivity() {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(whatsappUrl))
             startActivity(browserIntent)
 
-
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "Gagal mengirim reminder", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // ✅ Override onResume untuk refresh data
+    override fun onResume() {
+        super.onResume()
+        loadCartItems()
     }
 }

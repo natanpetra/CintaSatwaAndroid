@@ -63,30 +63,33 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginUser(email: String, password: String) {
         RetrofitClient.instance.login(email, password).enqueue(object : retrofit2.Callback<Profile> {
-                override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
-                    if (response.isSuccessful) {
-                        val profile = response.body()
-                        if (profile != null) {
-                            Prefs.putString("token", profile.tokenApi)
-                            Prefs.putInt("user_id", profile.userId!!)
-                            Prefs.putString("name", profile.name)
-                            Prefs.putString("email", profile.email)
-                            Prefs.putInt("role_id", profile.roleId!!)
-                            Prefs.putString("image", profile.imageUrl)
-                            Prefs.putInt("is_scan", profile.isScan!!)
-                            Toast.makeText(this@LoginActivity, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this@LoginActivity, BerandaActivity::class.java))
-                            finish()
-                        }
-                    } else {
-                        Toast.makeText(this@LoginActivity, "Login Gagal", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
+                if (response.isSuccessful) {
+                    val profile = response.body()
+                    if (profile != null) {
+                        // ✅ PERBAIKAN: Simpan semua data termasuk phone
+                        Prefs.putString("token", profile.tokenApi)
+                        Prefs.putInt("user_id", profile.userId!!)
+                        Prefs.putString("name", profile.name)
+                        Prefs.putString("email", profile.email)
+                        Prefs.putString("phone", profile.phone?.toString() ?: "") // ✅ TAMBAH INI
+                        Prefs.putInt("role_id", profile.roleId!!)
+                        Prefs.putString("image", profile.imageUrl)
+                        Prefs.putInt("is_scan", profile.isScan!!)
 
-                override fun onFailure(call: Call<Profile>, t: Throwable) {
-                    Log.e("LoginActivity", "Error: ${t.message}")
+                        Toast.makeText(this@LoginActivity, "Login Berhasil", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LoginActivity, BerandaActivity::class.java))
+                        finish()
+                    }
+                } else {
                     Toast.makeText(this@LoginActivity, "Login Gagal", Toast.LENGTH_SHORT).show()
                 }
-            })
+            }
+
+            override fun onFailure(call: Call<Profile>, t: Throwable) {
+                Log.e("LoginActivity", "Error: ${t.message}")
+                Toast.makeText(this@LoginActivity, "Login Gagal", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

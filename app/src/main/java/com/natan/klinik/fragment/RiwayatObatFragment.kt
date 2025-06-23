@@ -24,11 +24,7 @@ import okhttp3.Response
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [RiwayatObatFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class RiwayatObatFragment : Fragment() {
     lateinit var binding: FragmentRiwayatObatBinding
     // TODO: Rename and change types of parameters

@@ -63,7 +63,6 @@ class ObjectDetectorHelper(
                 context
             )
         } catch (e: Exception) {
-
             objectDetectorListener?.onError(e.toString())
 
         }

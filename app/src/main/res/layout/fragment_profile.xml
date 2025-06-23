@@ -55,6 +55,7 @@
             android:background="#BDBDBD"
             android:layout_marginVertical="16dp"/>
 
+        <!-- File: fragment_profile.xml - Pastikan ada TextView untuk phone -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,7 +68,7 @@
                 android:layout_weight="1"
                 android:text="No. HP"
                 android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="@android:color/black"/>
 
             <TextView
                 android:id="@+id/tvPhonePasien"

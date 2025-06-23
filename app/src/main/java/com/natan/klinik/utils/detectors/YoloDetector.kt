@@ -8,6 +8,8 @@ import com.ultralytics.yolo.predict.detect.DetectedObject
 import com.ultralytics.yolo.predict.detect.TfliteDetector
 import org.tensorflow.lite.support.image.TensorImage
 
+
+
 class YoloDetector(
     var confidenceThreshold: Float = 0.3f,
     var iouThreshold: Float = 0.3f,
@@ -107,5 +109,6 @@ class YoloDetector(
         val ret = DetectionResult(ppImage, detections)
         ret.info = yolo.stats
         return ret
+
     }
 }

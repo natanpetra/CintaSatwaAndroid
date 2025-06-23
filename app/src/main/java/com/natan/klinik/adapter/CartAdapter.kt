@@ -10,7 +10,7 @@ import com.natan.klinik.model.ProductItem
 import com.natan.klinik.utils.CartManager
 
 class CartAdapter(
-    private val items: List<ProductItem>,
+    private val items: MutableList<ProductItem>,
     private val onItemChanged: () -> Unit
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
@@ -33,29 +33,61 @@ class CartAdapter(
         val item = items[position]
 
         holder.tvName.text = item.name ?: "Unknown Product"
-        holder.tvPrice.text = "Rp ${item.price ?: "0"}"
-        holder.tvQuantity.text = item.quantity?.toString() ?: "0"
 
+        // ✅ Format harga dengan quantity
+        val pricePerItem = item.price?.toDoubleOrNull() ?: 0.0
+        val quantity = item.quantity ?: 0
+        val totalItemPrice = pricePerItem * quantity
+
+        holder.tvPrice.text = "Rp ${String.format("%,.0f", pricePerItem)} x $quantity = Rp ${String.format("%,.0f", totalItemPrice)}"
+        holder.tvQuantity.text = quantity.toString()
+
+        // ✅ Increase quantity
         holder.btnIncrease.setOnClickListener {
             item.quantity = (item.quantity ?: 0) + 1
+            CartManager.updateQuantity(item.id ?: 0, item.quantity ?: 1)
             notifyItemChanged(position)
             onItemChanged()
         }
 
+        // ✅ Decrease quantity
         holder.btnDecrease.setOnClickListener {
             if ((item.quantity ?: 0) > 1) {
                 item.quantity = (item.quantity ?: 0) - 1
+                CartManager.updateQuantity(item.id ?: 0, item.quantity ?: 1)
                 notifyItemChanged(position)
                 onItemChanged()
             }
         }
 
+        // ✅ PERBAIKAN: Remove item dengan proper handling
         holder.btnRemove.setOnClickListener {
-            CartManager.removeItem(item.id ?: 0)
-            notifyItemRemoved(position)
-            onItemChanged()
+            val itemId = item.id ?: 0
+            val currentPosition = holder.adapterPosition
+
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                // Hapus dari CartManager
+                CartManager.removeItem(itemId)
+
+                // Hapus dari local list
+                items.removeAt(currentPosition)
+
+                // Notify adapter
+                notifyItemRemoved(currentPosition)
+                notifyItemRangeChanged(currentPosition, items.size)
+
+                // Update total price
+                onItemChanged()
+            }
         }
     }
 
     override fun getItemCount(): Int = items.size
+
+    // ✅ Method untuk refresh data dari CartManager
+    fun refreshData() {
+        items.clear()
+        items.addAll(CartManager.getCartItems())
+        notifyDataSetChanged()
+    }
 }

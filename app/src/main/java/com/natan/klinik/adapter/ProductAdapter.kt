@@ -14,9 +14,7 @@ import com.natan.klinik.R
 import com.natan.klinik.model.ProductItem
 import java.text.DecimalFormat
 
-/**
- * Created by Azhar Rivaldi on 22-12-2019.
- */
+
 
 class ProductAdapter(
     private val mContext: Context,

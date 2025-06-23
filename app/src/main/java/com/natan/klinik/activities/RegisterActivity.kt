@@ -46,11 +46,14 @@ class RegisterActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             val profile = response.body()
                             if (profile != null) {
+                                // ✅ PERBAIKAN: Simpan data phone saat register
                                 Prefs.putString("token", profile.tokenApi)
                                 Prefs.putString("name", profile.name)
                                 Prefs.putString("email", profile.email)
+                                Prefs.putString("phone", profile.phone?.toString() ?: phone) // ✅ TAMBAH INI
                                 Prefs.putInt("role_id", profile.roleId!!)
                                 Prefs.putString("image", profile.imageUrl)
+
                                 Toast.makeText(this@RegisterActivity, "Register Berhasil, mohon login terlebih dahulu", Toast.LENGTH_SHORT).show()
                                 finish()
                             }
@@ -60,7 +63,7 @@ class RegisterActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<Profile>, t: Throwable) {
-                        Log.e("LoginActivity", "Error: ${t.message}")
+                        Log.e("RegisterActivity", "Error: ${t.message}")
                         Toast.makeText(this@RegisterActivity, "Register Gagal", Toast.LENGTH_SHORT).show()
                     }
                 })
