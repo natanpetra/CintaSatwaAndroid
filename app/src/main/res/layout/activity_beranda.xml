@@ -26,16 +26,16 @@
         android:layout_alignParentRight="true"/>
 
     <!-- Add the new Reservasi button here -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabReservasi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@id/bottom_navigation"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
-        android:src="@drawable/img_reservasi"
-        app:backgroundTint="@color/colorPrimary" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabReservasi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@id/bottom_navigation"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="80dp"
+            android:src="@drawable/img_reservasi"
+            app:backgroundTint="@color/colorPrimary" />
 
     <!-- Bottom Navigation View -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

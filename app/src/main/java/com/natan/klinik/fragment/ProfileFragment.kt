@@ -27,25 +27,22 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import java.io.File
 
 class ProfileFragment : Fragment() {
-    lateinit var binding : FragmentProfileBinding
+    lateinit var binding: FragmentProfileBinding
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 binding.imgProfilPasien.setImageURI(it)
-                val userId = Prefs.getInt("user_id", 0) // atau ambil dari session
+                val userId = Prefs.getInt("user_id", 0)
                 uploadThumbnail(userId, it, requireContext())
             }
         }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,44 +56,92 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        var name = Prefs.getString("name", "")
-        var email = Prefs.getString("email", "")
-        val phone = Prefs.getString("phone", "")
-        var role_id = Prefs.getInt("role_id", 0)
-        var image = Prefs.getString("image", "")
-        binding.tvNamaPasien.setText(name)
-        binding.tvEmailPasien.setText(email)
-        if (role_id == 2){
-            binding.tvRolePasien.setText("Pasien")
-        }else{
-            binding.tvRolePasien.setText("Dokter/Admin")
-        }
-        Glide.with(requireContext()).load(image).placeholder(R.drawable.ic_account).into(binding.imgProfilPasien)
-
-        binding.btnLogout.setOnClickListener {
-            Prefs.clear()
-            val intent = Intent(context, LoginActivity::class.java)
-            startActivity(intent)
-            activity?.finish()
-        }
-
-        // Tambahkan listener untuk tombol riwayat reservasi
-        binding.btnReservationHistory.setOnClickListener {
-            startActivity(Intent(requireContext(), ReservationHistoryActivity::class.java))
-        }
-
-        binding.imgProfilPasien.setOnClickListener{
-            pickImageLauncher.launch("image/*")
-        }
+        setupProfileData()
+        setupClickListeners()
 
         return binding.root
     }
 
+    private fun setupProfileData() {
+        val name = Prefs.getString("name", "")
+        val email = Prefs.getString("email", "")
+        val phone = Prefs.getString("phone", "")
+        val roleId = Prefs.getInt("role_id", 0)
+        val image = Prefs.getString("image", "")
+
+        // ✅ FIX: Set data dengan proper handling
+        binding.tvNamaPasien.text = name.ifEmpty { "Nama tidak tersedia" }
+        binding.tvEmailPasien.text = email.ifEmpty { "Email tidak tersedia" }
+
+        // ✅ FIX: Tampilkan nomor HP yang sesuai dengan registrasi
+        binding.tvPhonePasien.text = formatPhoneNumber(phone)
+
+        // Set role
+        binding.tvRolePasien.text = if (roleId == 2) "Pasien" else "Dokter/Admin"
+
+        // Load profile image
+        Glide.with(requireContext())
+            .load(image)
+            .placeholder(R.drawable.ic_account)
+            .error(R.drawable.ic_account)
+            .into(binding.imgProfilPasien)
+
+        // ✅ Debug log untuk memastikan data yang tersimpan
+        Log.d("ProfileFragment", "Name: $name")
+        Log.d("ProfileFragment", "Email: $email")
+        Log.d("ProfileFragment", "Phone: $phone")
+        Log.d("ProfileFragment", "Role ID: $roleId")
+    }
+
+    // ✅ FIX: Format nomor HP dengan benar
+    private fun formatPhoneNumber(phone: String): String {
+        if (phone.isEmpty()) return "Nomor HP tidak tersedia"
+
+        // Jika phone masih dalam format Long/Int dari server, konversi dulu
+        val phoneStr = phone.toString()
+
+        // Jika sudah dalam format yang benar, return langsung
+        if (phoneStr.startsWith("0") || phoneStr.startsWith("+62")) {
+            return phoneStr
+        }
+
+        // Jika hanya angka tanpa prefix, tambahkan 0 di depan
+        return if (phoneStr.matches(Regex("^[0-9]+$"))) {
+            "0$phoneStr"
+        } else {
+            phoneStr
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.btnLogout.setOnClickListener {
+            logout()
+        }
+
+        binding.btnReservationHistory.setOnClickListener {
+            startActivity(Intent(requireContext(), ReservationHistoryActivity::class.java))
+        }
+
+        binding.imgProfilPasien.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
+    }
+
+    private fun logout() {
+        // ✅ Clear all saved data
+        Prefs.clear()
+
+        // Navigate to login
+        val intent = Intent(context, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        activity?.finish()
+    }
+
     fun uploadThumbnail(userId: Int, fileUri: Uri, context: Context) {
-        val file = File(FileUtils.getPath(context, fileUri)) // kamu perlu fungsi `getPath()` dari Uri ke File
+        val file = java.io.File(FileUtils.getPath(context, fileUri))
         val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
         val body = MultipartBody.Part.createFormData("thumbnail", file.name, requestFile)
         val userIdBody = RequestBody.create("text/plain".toMediaTypeOrNull(), userId.toString())
@@ -135,7 +180,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    // Handle permission result di Fragment
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
@@ -145,8 +189,6 @@ class ProfileFragment : Fragment() {
             pickImageLauncher.launch("image/*")
         }
     }
-
-
 
     companion object {
         private const val ARG_PARAM1 = "param1"

@@ -20,6 +20,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.URLEncoder
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CheckoutActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCheckoutBinding
@@ -138,16 +140,19 @@ class CheckoutActivity : AppCompatActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
 
+                            // ✅ ENHANCED: Send detailed WhatsApp message with items
+                            sendDetailedWhatsAppReminderToSeller(
+                                orderId = apiResponse.order_id.toString(),
+                                customerName = Prefs.getString("name", "Customer"),
+                                customerPhone = Prefs.getString("phone", "-"),
+                                totalAmount = String.format("%,.0f", apiResponse.total_price ?: totalPrice),
+                                cartItems = cartItems
+                            )
+
                             // ✅ Clear cart setelah checkout berhasil
                             CartManager.clearCart()
                             cartItems.clear()
                             cartAdapter.notifyDataSetChanged()
-
-                            sendWhatsAppReminderToSeller(
-                                orderId = apiResponse.order_id.toString(),
-                                customerName = Prefs.getString("name", "Customer"),
-                                totalAmount = String.format("%,.0f", apiResponse.total_price ?: totalPrice)
-                            )
 
                             finish()
                         }
@@ -178,20 +183,57 @@ class CheckoutActivity : AppCompatActivity() {
         })
     }
 
-    private fun sendWhatsAppReminderToSeller(orderId: String, customerName: String, totalAmount: String) {
+    // ✅ ENHANCED: Detailed WhatsApp message with item details
+    private fun sendDetailedWhatsAppReminderToSeller(
+        orderId: String,
+        customerName: String,
+        customerPhone: String,
+        totalAmount: String,
+        cartItems: List<ProductItem>
+    ) {
         try {
-            val sellerPhone = "6281234567890"
+            val sellerPhone = "6281353941310" // ✅ Ganti dengan nomor admin yang benar
+
+            // ✅ Get current date and time
+            val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale("id", "ID"))
+            val currentDateTime = dateFormat.format(Date())
+
+            // ✅ Build detailed items list
+            val itemsDetails = StringBuilder()
+            var totalItems = 0
+
+            cartItems.forEachIndexed { index, item ->
+                val itemTotal = (item.price?.toDoubleOrNull() ?: 0.0) * (item.quantity ?: 0)
+                totalItems += (item.quantity ?: 0)
+
+                itemsDetails.append("${index + 1}. ${item.name}\n")
+                itemsDetails.append("   Qty: ${item.quantity} x Rp ${String.format("%,.0f", item.price?.toDoubleOrNull() ?: 0.0)}\n")
+                itemsDetails.append("   Subtotal: Rp ${String.format("%,.0f", itemTotal)}\n")
+                if (index < cartItems.size - 1) itemsDetails.append("\n")
+            }
+
+            // ✅ Build comprehensive message
             val message = """
-            📢 *REMINDER ORDER BARU* 📢
-            
-            Hai Admin, ada order baru nih!
-            
-            *Detail Order:*
-            - Order ID: $orderId
-            - Nama Customer: $customerName
-            - Total Pembayaran: Rp $totalAmount
-            
-            Segera proses ordernya ya!
+🚨 *PESANAN BARU MASUK!* 🚨
+
+📋 *DETAIL PESANAN*
+━━━━━━━━━━━━━━━━━━━━━
+🆔 Order ID: #$orderId
+📅 Tanggal: $currentDateTime
+👤 Customer: $customerName
+📱 No. HP: $customerPhone
+
+🛒 *DAFTAR BARANG ($totalItems item)*
+━━━━━━━━━━━━━━━━━━━━━
+$itemsDetails
+
+💰 *TOTAL PEMBAYARAN*
+━━━━━━━━━━━━━━━━━━━━━
+💵 Rp $totalAmount
+
+⚡ *SEGERA PROSES PESANAN INI!*
+
+Terima kasih 🙏
             """.trimIndent()
 
             val whatsappUrl = "https://wa.me/$sellerPhone?text=${URLEncoder.encode(message, "UTF-8")}"
@@ -200,7 +242,7 @@ class CheckoutActivity : AppCompatActivity() {
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Gagal mengirim reminder", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Gagal mengirim reminder: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 

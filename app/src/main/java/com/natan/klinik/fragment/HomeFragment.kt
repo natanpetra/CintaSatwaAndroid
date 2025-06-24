@@ -33,7 +33,6 @@ import java.util.Calendar
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-
 class HomeFragment : Fragment(), MainAdapter.OnSelectData {
     private lateinit var binding: FragmentHomeBinding
     // TODO: Rename and change types of parameters
@@ -44,6 +43,10 @@ class HomeFragment : Fragment(), MainAdapter.OnSelectData {
     private var mdlMainMenu: ModelMain? = null
     private var lsMainMenu: MutableList<ModelMain?> = ArrayList()
     private var hariIni: String? = null
+
+    // ✅ FEATURE FLAGS - Control visibility of features
+    private val SHOW_RAS_FEATURE = false // ✅ Set false untuk hide Ras
+    private val SHOW_ECTOPARASITE_FEATURE = true // ✅ Kontrol Ectoparasite juga
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,20 +101,33 @@ class HomeFragment : Fragment(), MainAdapter.OnSelectData {
     }
 
     private fun setMenu() {
+        // ✅ Core features - always shown
         mdlMainMenu = ModelMain("Klinik", R.drawable.img_clinic)
         lsMainMenu.add(mdlMainMenu)
+
         mdlMainMenu = ModelMain("Dog Care", R.drawable.img_dog_guide)
         lsMainMenu.add(mdlMainMenu)
+
         mdlMainMenu = ModelMain("Dokter", R.drawable.img_doctor)
         lsMainMenu.add(mdlMainMenu)
+
         mdlMainMenu = ModelMain("Produk", R.drawable.img_produk)
         lsMainMenu.add(mdlMainMenu)
+
         mdlMainMenu = ModelMain("Reservasi Online", R.drawable.img_reservasi)
         lsMainMenu.add(mdlMainMenu)
-        mdlMainMenu = ModelMain("Ectoparasite", R.drawable.img_dog_guide)
-        lsMainMenu.add(mdlMainMenu)
-        mdlMainMenu = ModelMain("Ras", R.drawable.img_dog_guide)
-        lsMainMenu.add(mdlMainMenu)
+
+        // ✅ Conditional features - shown based on feature flags
+        if (SHOW_ECTOPARASITE_FEATURE) {
+            mdlMainMenu = ModelMain("Ectoparasite", R.drawable.img_dog_guide)
+            lsMainMenu.add(mdlMainMenu)
+        }
+
+        // ✅ RAS FEATURE - HIDDEN when SHOW_RAS_FEATURE = false
+        if (SHOW_RAS_FEATURE) {
+            mdlMainMenu = ModelMain("Ras", R.drawable.img_dog_guide)
+            lsMainMenu.add(mdlMainMenu)
+        }
 
         val myAdapter = MainAdapter(lsMainMenu, this)
         binding.rvMainMenu.adapter = myAdapter
@@ -137,8 +153,19 @@ class HomeFragment : Fragment(), MainAdapter.OnSelectData {
             "Dokter" -> startActivity(Intent(requireContext(), DoctorListActivity::class.java))
             "Produk" -> startActivity(Intent(requireContext(), ProductListActivity::class.java))
             "Reservasi Online" -> startActivity(Intent(requireContext(), ReservasiActivity::class.java))
-            "Ectoparasite" -> startActivity(Intent(requireContext(), EctoparasiteActivity::class.java))
-            "Ras" -> startActivity(Intent(requireContext(),RasActivity::class.java))
+
+            // ✅ Conditional navigation - only if features are enabled
+            "Ectoparasite" -> {
+                if (SHOW_ECTOPARASITE_FEATURE) {
+                    startActivity(Intent(requireContext(), EctoparasiteActivity::class.java))
+                }
+            }
+            "Ras" -> {
+                // ✅ Only navigate if feature is enabled
+                if (SHOW_RAS_FEATURE) {
+                    startActivity(Intent(requireContext(), RasActivity::class.java))
+                }
+            }
         }
     }
 
